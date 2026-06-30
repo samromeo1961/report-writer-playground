@@ -1,0 +1,8 @@
+{
+  "jobNo": "1481",
+  "costCentres": [
+    { "code": "005", "name": "Contour Survey", "budget": 1000, "ordered": 1000, "invoiced": 0, "forecast": 1000, "variance": 0, "percentComplete": 0 },
+    { "code": "010", "name": "Drafting & Professional Reports", "budget": 400, "ordered": 400, "invoiced": 0, "forecast": 400, "variance": 0, "percentComplete": 0 },
+    { "code": "015", "name": "Engineers & Geotechnical", "budget": 650, "ordered": 650, "invoiced": 0, "forecast": 650, "variance": 0, "percentComplete": 0 }
+  ]
+}
