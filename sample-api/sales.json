@@ -1,0 +1,9 @@
+{
+  "data": [
+    { "Region": "North", "Category": "Hardware", "Product": "Hardware Item A1", "Units": 8, "Price": 18.37 },
+    { "Region": "North", "Category": "Software", "Product": "Software Item B2", "Units": 22, "Price": 145.6 },
+    { "Region": "South", "Category": "Services", "Product": "Services Item C3", "Units": 14, "Price": 75.05 },
+    { "Region": "East", "Category": "Hardware", "Product": "Hardware Item D4", "Units": 31, "Price": 240.18 },
+    { "Region": "West", "Category": "Software", "Product": "Software Item E5", "Units": 5, "Price": 92.4 }
+  ]
+}

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/report-writer-playground/favicon.svg" />
+    <title>Report Writer — Designer & Viewer</title>
+    <style>
+      :root {
+        --rw-bg-app: #f3f4f6; --rw-surface: #ffffff; --rw-border: #e2e8f0;
+        --rw-text: #1e293b; --rw-text-muted: #64748b; --rw-text-faint: #94a3b8; --rw-accent: #2f6fed;
+        --rw-accent-weak: #eef3ff; --rw-input-bg: #f1f3f6; --rw-input-border: #d7dce4;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; height: 100%; font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; }
+      #app { display: flex; flex-direction: column; height: 100%; }
+
+      /* A slim, tinted title strip — visually subordinate to the white ribbon below it. */
+      .appbar { display: flex; align-items: center; gap: 14px; padding: 5px 16px;
+        background: #f1f5f9; border-bottom: 1px solid var(--rw-border); flex: 0 0 auto; }
+      .appbar .brand { font-size: 13px; font-weight: 600; color: var(--rw-text); letter-spacing: .01em; }
+      .appbar .spacer { flex: 1; }
+      .appbar .meta { font-size: 12px; color: var(--rw-text-muted); }
+      .modes { display: inline-flex; background: var(--rw-bg-app); border: 1px solid var(--rw-border);
+        border-radius: 999px; padding: 2px; gap: 2px; }
+      .modes button { font-size: 12.5px; padding: 5px 15px; border: 0; border-radius: 999px;
+        background: transparent; color: var(--rw-text-muted); cursor: pointer; }
+      .modes button:hover { color: var(--rw-text); }
+      .modes button.active { background: var(--rw-surface); color: var(--rw-accent); font-weight: 600;
+        box-shadow: 0 0 0 1px rgba(47,111,237,.35), 0 1px 2px rgba(15,23,42,.10); }
+      /* Export buttons: sleek colored outlines that fill on hover, to match the toolbar's
+         clean outline-button scheme rather than two loud solid blocks. */
+      .exbtn { font-size: 12.5px; padding: 6px 14px; border: 1px solid; border-radius: 6px; cursor: pointer;
+        font-weight: 600; background: transparent; }
+      .exbtn.pdf { color: var(--rw-accent); border-color: var(--rw-accent); }
+      .exbtn.pdf:hover { background: var(--rw-accent); color: #fff; }
+      .exbtn.xlsx { color: #14784a; border-color: #14784a; }
+      .exbtn.xlsx:hover { background: #14784a; color: #fff; }
+      .exbtn.docx { color: #2b579a; border-color: #2b579a; }
+      .exbtn.docx:hover { background: #2b579a; color: #fff; }
+      .exbtn:disabled { opacity: .5; cursor: default; }
+      /* Templates (merge) tab */
+      #templates { overflow: auto; padding: 20px 24px; }
+      .tpl-wrap { display: grid; grid-template-columns: 320px 1fr; gap: 28px; max-width: 1100px; }
+      .tpl-gallery h3, .tpl-detail h3 { margin: 0 0 8px; font-size: 11px; font-weight: 600; color: var(--rw-text-muted);
+        text-transform: uppercase; letter-spacing: .045em; padding-bottom: 7px; border-bottom: 1px solid var(--rw-border); }
+      .tpl-card { border: 1px solid transparent; border-radius: 8px; padding: 11px 13px; margin-bottom: 6px; cursor: pointer;
+        background: var(--rw-input-bg); transition: border-color .12s, background .12s, box-shadow .12s; }
+      .tpl-card:hover { background: var(--rw-surface); border-color: var(--rw-input-border); }
+      .tpl-card.sel { background: var(--rw-accent-weak); border-color: var(--rw-accent); box-shadow: 0 0 0 1px var(--rw-accent); }
+      .tpl-card .nm { font-weight: 600; font-size: 13px; color: var(--rw-text); display: flex; gap: 8px; align-items: center; }
+      .tpl-card .badge { font-size: 9.5px; font-weight: 700; letter-spacing: .03em; padding: 1px 6px; border-radius: 4px; color: #fff; }
+      .tpl-card .badge.docx { background: #2b579a; } .tpl-card .badge.xlsx { background: #14784a; }
+      .tpl-card .bl { font-size: 12px; color: var(--rw-text-muted); margin-top: 4px; line-height: 1.45; }
+      .tpl-up { margin-top: 14px; font-size: 12px; color: var(--rw-text-muted); }
+      .tpl-up input[type=file] { margin-top: 5px; font-size: 12px; }
+      .tpl-detail .req { font-size: 12.5px; color: var(--rw-text); background: var(--rw-input-bg); border: 1px solid var(--rw-border);
+        border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; line-height: 1.6; }
+      .tpl-detail .req b { color: var(--rw-text); }
+      .tpl-detail .req code { background: var(--rw-surface); border: 1px solid var(--rw-input-border); border-radius: 4px;
+        padding: 0 5px; font-size: 11.5px; color: var(--rw-accent); }
+      .tpl-detail textarea { width: 100%; height: 260px; font: 12px/1.5 ui-monospace, 'SF Mono', Menlo, monospace; color: var(--rw-text);
+        background: var(--rw-input-bg); border: 1px solid transparent; border-radius: 8px; padding: 11px 12px; box-sizing: border-box;
+        resize: vertical; transition: border-color .12s, background .12s, box-shadow .12s; }
+      .tpl-detail textarea:hover { border-color: var(--rw-input-border); }
+      .tpl-detail textarea:focus { outline: none; background: var(--rw-surface); border-color: var(--rw-accent); box-shadow: 0 0 0 2px var(--rw-accent-weak); }
+      .tpl-actions { display: flex; gap: 10px; margin-top: 14px; align-items: center; flex-wrap: wrap; }
+      .tpl-status { font-size: 12px; font-weight: 500; }
+
+      /* The Saved Reports / Parameters aside — a resizable, collapsible column
+         injected as the left of the designer body (so it sits under the ribbon). */
+      .rw-aside { position: relative; flex: 0 0 auto; width: 240px; display: flex; flex-direction: column;
+        background: var(--rw-toolbox-bg, #fafbfd); border-right: 1px solid var(--rw-border, #e2e8f0);
+        font-size: 12.5px; color: var(--rw-text, #1e293b); }
+      .rw-aside.collapsed { width: 0 !important; border-right: 0; }
+      .rw-aside-inner { flex: 1 1 auto; min-height: 0; overflow: auto; }
+      .rw-aside.collapsed .rw-aside-inner { display: none; }
+      .rw-aside-resize { position: absolute; top: 0; right: 0; bottom: 0; width: 6px; cursor: col-resize; }
+      .rw-aside-resize:hover { background: var(--rw-accent, #2f6fed); opacity: .35; }
+      .rw-aside.collapsed .rw-aside-resize { display: none; }
+      .rw-aside-collapse { position: absolute; top: 50%; right: -12px; transform: translateY(-50%); z-index: 6;
+        width: 13px; height: 46px; display: inline-flex; align-items: center; justify-content: center;
+        border: 1px solid var(--rw-border-strong, #cbd5e1); border-left: 0; border-radius: 0 7px 7px 0;
+        background: #fff; color: var(--rw-text-muted, #64748b); cursor: pointer; font-size: 11px; line-height: 1;
+        box-shadow: 1px 0 3px rgba(15,23,42,.10); padding: 0; }
+      .rw-aside-collapse:hover { color: var(--rw-accent, #2f6fed); border-color: var(--rw-accent, #2f6fed); }
+      .rw-aside .aside-sec { border-bottom: 1px solid var(--rw-border, #e2e8f0); }
+      .rw-aside .aside-head { display: flex; align-items: center; justify-content: space-between;
+        padding: 9px 12px; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+        color: var(--rw-text-muted, #64748b); }
+      .rw-aside .aside-body { padding: 4px 8px 10px; display: flex; flex-direction: column; gap: 6px; }
+      .rw-aside .rw-saved { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 6px;
+        cursor: pointer; border: 1px solid transparent; }
+      .rw-aside .rw-saved:hover { background: var(--rw-accent-weak, #eef3ff); border-color: var(--rw-accent, #2f6fed); }
+      .rw-aside .rw-saved.current { background: var(--rw-accent-weak, #eef3ff); font-weight: 600; }
+      .rw-aside .rw-saved .nm { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .rw-aside .rw-pfield { display: flex; flex-direction: column; gap: 3px; }
+      .rw-aside .rw-pfield label { font-size: 11.5px; color: var(--rw-text-muted, #64748b); }
+      .rw-aside .rw-pfield input { font-size: 12.5px; padding: 5px 8px; border: 1px solid var(--rw-border-strong, #cbd5e1);
+        border-radius: 6px; background: #fff; color: var(--rw-text, #1e293b); }
+      .rw-aside .rw-aside-btn { font-size: 12px; padding: 2px 7px; border: 1px solid var(--rw-border-strong, #cbd5e1);
+        background: #fff; color: var(--rw-text-muted, #64748b); border-radius: 6px; cursor: pointer; }
+      .rw-aside .rw-aside-btn:hover { background: var(--rw-accent-weak, #eef3ff); border-color: var(--rw-accent, #2f6fed); }
+      .rw-aside .rw-empty { color: var(--rw-text-muted, #94a3b8); font-style: italic; padding: 2px 8px; }
+
+      .panel { flex: 1 1 auto; min-height: 0; }
+      .panel.hidden { display: none; }
+      /* `:not(.hidden)` so the id-selector display doesn't override `.panel.hidden { display:none }`. */
+      #json { height: 100%; background: #1e1e24; }
+      #json:not(.hidden) { display: flex; flex-direction: column; }
+      .json-bar { display: flex; align-items: center; gap: 12px; padding: 8px 12px;
+        background: #16161b; border-bottom: 1px solid #2c2c34; flex: 0 0 auto; }
+      .json-bar .json-apply { font-size: 12.5px; padding: 6px 14px; border: 0; border-radius: 6px;
+        background: #2f6fed; color: #fff; font-weight: 600; cursor: pointer; }
+      .json-bar .json-apply:hover { background: #2a62d4; }
+      .json-bar .json-copy { font-size: 12.5px; padding: 6px 12px; border: 1px solid #3a3a44; border-radius: 6px;
+        background: transparent; color: #c7cdda; cursor: pointer; }
+      .json-bar .json-copy:hover { background: #23232b; border-color: #4a4a56; color: #fff; }
+      .json-bar .json-copy.done { color: #4ade80; border-color: #2f6b46; }
+      .json-bar .json-hint { font-size: 12px; color: #8b94a8; }
+      .json-bar .json-status { font-size: 12px; margin-left: auto; font-family: 'SFMono-Regular', Consolas, monospace; }
+      .json-bar .json-status.ok { color: #4ade80; }
+      .json-bar .json-status.err { color: #f87171; cursor: pointer; }
+      .json-bar .json-status.err:hover { text-decoration: underline; }
+      #json textarea { flex: 1 1 auto; width: 100%; box-sizing: border-box; resize: none; border: 0; outline: none;
+        padding: 12px 16px; background: #1e1e24; color: #d6e2ff; font-family: 'SFMono-Regular', Consolas, monospace;
+        font-size: 12px; line-height: 1.5; }
+      #help { overflow: auto; height: 100%; background: #fff; }
+      .help-doc { max-width: 820px; margin: 0 auto; padding: 28px 32px 64px;
+        color: #1f2733; font-size: 14px; line-height: 1.6; }
+      .help-doc h1 { font-size: 26px; color: #1b2a4a; margin: 8px 0 4px; }
+      .help-doc h2 { font-size: 19px; color: #1b2a4a; margin: 28px 0 8px;
+        border-bottom: 1px solid #e4e8f0; padding-bottom: 4px; }
+      .help-doc h3 { font-size: 15px; color: #2a3a5c; margin: 18px 0 6px; }
+      .help-doc ul { margin: 6px 0 6px 4px; padding-left: 20px; }
+      .help-doc li { margin: 3px 0; }
+      .help-doc p { margin: 8px 0; }
+      .help-doc a { color: #2f6fed; }
+      .help-doc code { background: #f1f3f8; color: #b5316b; padding: 1px 5px;
+        border-radius: 4px; font-size: 13px; }
+      .help-doc pre.md-code { background: #1e1e24; color: #d6e2ff; padding: 12px 14px;
+        border-radius: 6px; overflow: auto; font-size: 12.5px; line-height: 1.5; }
+      .help-doc pre.md-code code { background: none; color: inherit; padding: 0; }
+      .help-doc blockquote { margin: 10px 0; padding: 8px 14px; border-left: 3px solid #ffd24d;
+        background: #fff8e1; color: #5a4b1f; }
+      .help-doc img { max-width: 100%; height: auto; display: block; margin: 16px 0;
+        border: 1px solid #e2e6ee; border-radius: 6px; box-shadow: 0 1px 6px rgba(0,0,0,.1); }
+    </style>
+    <script type="module" crossorigin src="/report-writer-playground/assets/index-DqOGrkfD.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="appbar">
+        <span class="brand">Report Writer</span>
+        <div class="modes">
+          <button data-tab="design" class="active">Design</button>
+          <button data-tab="preview">Preview</button>
+          <button data-tab="templates">Templates</button>
+          <button data-tab="json">JSON</button>
+          <button data-tab="help">Help</button>
+        </div>
+        <span class="spacer"></span>
+        <span class="meta" id="meta"></span>
+        <button id="xlsxbtn" class="exbtn xlsx" title="Export the report data to Excel (.xlsx)">Excel</button>
+        <button id="docxbtn" class="exbtn docx" title="Export the report to Word (.docx)">Word</button>
+        <button id="pdfbtn" class="exbtn pdf" title="Generate a PDF directly (no print dialog)">PDF</button>
+      </div>
+      <div id="design" class="panel"></div>
+      <div id="preview" class="panel hidden"></div>
+      <div id="templates" class="panel hidden"></div>
+      <div id="json" class="panel hidden"></div>
+      <div id="help" class="panel hidden"></div>
+    </div>
+  </body>
+</html>
