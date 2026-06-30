@@ -38,6 +38,8 @@
       .exbtn.xlsx:hover { background: #14784a; color: #fff; }
       .exbtn.docx { color: #2b579a; border-color: #2b579a; }
       .exbtn.docx:hover { background: #2b579a; color: #fff; }
+      .exbtn.csv { color: #475569; border-color: #cbd5e1; }
+      .exbtn.csv:hover { background: #475569; color: #fff; }
       .exbtn:disabled { opacity: .5; cursor: default; }
       /* Templates (merge) tab */
       #templates { overflow: auto; padding: 20px 24px; }
@@ -146,7 +148,7 @@
       .help-doc img { max-width: 100%; height: auto; display: block; margin: 16px 0;
         border: 1px solid #e2e6ee; border-radius: 6px; box-shadow: 0 1px 6px rgba(0,0,0,.1); }
     </style>
-    <script type="module" crossorigin src="/report-writer-playground/assets/index-DeArWc4K.js"></script>
+    <script type="module" crossorigin src="/report-writer-playground/assets/index-Ba1F6GEB.js"></script>
   </head>
   <body>
     <div id="app">
@@ -163,6 +165,7 @@
         <span class="meta" id="meta"></span>
         <button id="xlsxbtn" class="exbtn xlsx" title="Export the report data to Excel (.xlsx)">Excel</button>
         <button id="docxbtn" class="exbtn docx" title="Export the report to Word (.docx)">Word</button>
+        <button id="csvbtn" class="exbtn csv" title="Export the report data to CSV (.csv)">CSV</button>
         <button id="pdfbtn" class="exbtn pdf" title="Generate a PDF directly (no print dialog)">PDF</button>
       </div>
       <div id="design" class="panel"></div>
