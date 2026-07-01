@@ -1,0 +1,146 @@
+{
+  "jobNo": "TEST01",
+  "synthetic": true,
+  "costCentres": [
+    {
+      "code": "015",
+      "name": "Engineers & Geotechnical",
+      "budget": 6900,
+      "ordered": 6900,
+      "invoiced": 6210,
+      "forecast": 6900,
+      "variance": 0,
+      "percentComplete": 90
+    },
+    {
+      "code": "120",
+      "name": "Excavation & Site Works",
+      "budget": 138000,
+      "ordered": 138000,
+      "invoiced": 110400,
+      "forecast": 138000,
+      "variance": 0,
+      "percentComplete": 80
+    },
+    {
+      "code": "180",
+      "name": "Concrete Supply",
+      "budget": 69000,
+      "ordered": 69000,
+      "invoiced": 48300,
+      "forecast": 69000,
+      "variance": 0,
+      "percentComplete": 70
+    },
+    {
+      "code": "250",
+      "name": "Sand & Cement",
+      "budget": 23000,
+      "ordered": 23000,
+      "invoiced": 13800,
+      "forecast": 23000,
+      "variance": 0,
+      "percentComplete": 60
+    },
+    {
+      "code": "360",
+      "name": "Frame & Truss Supply",
+      "budget": 126500,
+      "ordered": 126500,
+      "invoiced": 63250,
+      "forecast": 126500,
+      "variance": 0,
+      "percentComplete": 50
+    },
+    {
+      "code": "430",
+      "name": "Brick Supply",
+      "budget": 80500,
+      "ordered": 80500,
+      "invoiced": 32200,
+      "forecast": 80500,
+      "variance": 0,
+      "percentComplete": 40
+    },
+    {
+      "code": "450",
+      "name": "Brick Labour",
+      "budget": 115000,
+      "ordered": 115000,
+      "invoiced": 34500,
+      "forecast": 115000,
+      "variance": 0,
+      "percentComplete": 30
+    },
+    {
+      "code": "720",
+      "name": "Waterproofing",
+      "budget": 11500,
+      "ordered": 11500,
+      "invoiced": 2300,
+      "forecast": 11500,
+      "variance": 0,
+      "percentComplete": 20
+    },
+    {
+      "code": "770",
+      "name": "Plasterboard",
+      "budget": 69000,
+      "ordered": 69000,
+      "invoiced": 6900,
+      "forecast": 69000,
+      "variance": 0,
+      "percentComplete": 10
+    },
+    {
+      "code": "880",
+      "name": "Wall & Floor Tiling",
+      "budget": 34500,
+      "ordered": 34500,
+      "invoiced": 0,
+      "forecast": 34500,
+      "variance": 0,
+      "percentComplete": 0
+    },
+    {
+      "code": "900",
+      "name": "Painting",
+      "budget": 57500,
+      "ordered": 57500,
+      "invoiced": 51750,
+      "forecast": 57500,
+      "variance": 0,
+      "percentComplete": 90
+    },
+    {
+      "code": "920",
+      "name": "Plumbing Finish-Off",
+      "budget": 69000,
+      "ordered": 69000,
+      "invoiced": 55200,
+      "forecast": 69000,
+      "variance": 0,
+      "percentComplete": 80
+    },
+    {
+      "code": "950",
+      "name": "Final Fix Carpenter",
+      "budget": 23000,
+      "ordered": 23000,
+      "invoiced": 16100,
+      "forecast": 23000,
+      "variance": 0,
+      "percentComplete": 70
+    },
+    {
+      "code": "1060",
+      "name": "Site Clean",
+      "budget": 23000,
+      "ordered": 23000,
+      "invoiced": 13800,
+      "forecast": 23000,
+      "variance": 0,
+      "percentComplete": 60
+    }
+  ]
+}
